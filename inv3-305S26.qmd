@@ -1,0 +1,343 @@
+---
+title: 'Investigation #3: Meeting Problems'
+author: "Your names here"
+format: pdf
+echo: true
+---
+
+```{r Setup}
+#| include: false
+options(scipen=999)  # turns off scientific notation
+set.seed(    0    )  # set your own seed!
+```
+
+
+This investigation is a little different, in that you'll perform some simulations and then validate your simulation results with mathematical probability.
+
+NOTE: Your code should include no looping and no `replicate()` statements whatsoever. Everything must be vectorized.
+
+------------------------------------------------------------------------
+
+Xavier and Yolanda are supposed to meet at 12:30pm. Their actual arrival times, $X$ and $Y$, are random variables, each measured as minutes after 12pm. (So, for example, Xavier is right on time if $X=30$.) Each of them will wait at most 15 minutes for the other, so they meet if and only if their arrival times are at most 15 minutes apart.
+
+In this investigation, I will present several possible probability distributions for $(X,Y)$, and you will use both simulation and mathematics to analyze each scenario.
+
+------------------------------------------------------------------------
+
+### Before we get to the scenarios, write two building-block functions.
+
+#### 1. Write a function that generates a scatterplot of $(X,Y)$ pairs, *color-coded* to distinguish points where $X$ and $Y$ are at most 15 apart vs. more than 15 apart. 
+
+Your inputs will be the simulated pairs of $X$ and $Y$ values that you create later, passed in as two vectors, and the output will be the color-coded graph. You'll have to research how to color-code a scatterplot in R. 
+
+Your graph must include a **legend** explaining the color-coding. 
+
+Because the output of your function is a plot, your function will not have a `return()` statement.
+
+The axis labels and legend will be the same for every plot you make, so you may hard-code those into your function. However, **the title of each plot must be different** to indicate the different scenarios. So, you'll need to research how to pass arguments through *your* function to the plotting function inside of it. 
+
+As always, you're welcome to use base R or fancier packages like `ggplot2` if you're familiar with the latter.
+
+```{r Scatterplot maker}
+
+
+
+
+
+
+```
+
+
+#### 2. Write a function that calculates a 95% confidence interval for the probability that Xavier and Yolanda meet.
+
+Your inputs will be the simulated pairs of $X$ and $Y$ values that you create later, passed in as two vectors, and your output will be a 95% CI for P(Xavier and Yolanda meet). 
+
+Your function must call `prop.test()`. Round your endpoints to four decimal places.
+
+```{r CI for Prob of Meeting}
+
+
+
+```
+
+------------------------------------------------------------------------
+
+
+### Scenario 1: Xavier and Yolanda arrive independently and uniformly between 12pm and 1pm, so $X \sim \hbox{Unif}[0,60]$ and $Y \sim \hbox{Unif}[0,60]$.
+
+#### 3. Simulate at least 10,000 $(X,Y)$ pairs. Then create a well-labeled, color-coded scatterplot.
+
+Use your earlier function to generate the plot. No interpretation required.
+
+```{r Scenario 1 scatterplot}
+#| fig-height: 6
+#| fig-width: 6
+
+
+
+```
+
+#### 4. Calculate a 95% confidence interval for the probability that Xavier and Yolanda meet.
+
+Use your earlier function for the calculation. No interpretation required.
+
+```{r Scenario 1 CI}
+
+```
+
+#### 5. Use your simulation to estimate the average *absolute* difference in their arrival times.
+
+No need for a confidence interval; just provide the estimate.
+
+```{r Scenario 1 avg abs dist}
+
+```
+
+#### 6. Use your simulation to estimate how long they should agree to wait for each other, in order to have a 50% chance of meeting.
+
+No need for a confidence interval; just provide the estimate. *Hint:* The information you need lies in the absolute differences.
+
+```{r Scenario 1 how long to wait}
+
+```
+
+
+
+### Now you're going to use math to calculate some exact answers. Because $(X,Y)$ is uniformly distributed, the probability $(X,Y)$ falls in any region is just the area of that region divided by the total area where $(X,Y)$ can occur.
+
+#### 7. Use geometry to determine the area of the stripe where $X$ and $Y$ are at most 15 apart, and then determine the probability that Xavier and Yolanda meet.
+
+You might want to draw yourself the square [0,60]x[0,60] to see what's going on, but you don't need to include any picture here. 
+
+<!-- Your solution goes below this line. -->
+
+
+
+
+
+
+
+
+#### 8. Suppose they agree to wait at most $m$ minutes for each other. Again using geometry, determine the value of $m$ for which they have a 50% chance of meeting.
+
+<!-- Your solution goes below this line. -->
+
+
+
+
+
+
+
+------------------------------------------------------------------------
+
+### Scenario 2: Xavier and Yolanda's arrival times are independent, but not uniformly distributed. Instead, the pdfs of Xavier's and Yolanda's arrival times are, respectively,
+
+$$f_X(x) = \frac{x}{1800} \hbox{ for } 0 \leq x \leq 60 \qquad\qquad
+f_Y(y) = \frac{60-y}{1800} \hbox{ for } 0 \leq y \leq 60$$
+
+#### 9. First, some math: What is Xavier's expected arrival time, and what is Yolanda's expected arrival time? Use calculus, not simulation.
+
+<!-- Your solution goes below this line. -->
+
+
+
+
+
+
+
+#### 10. Should the probability they meet in Scenario 2 be higher or lower than the probability in Scenario 1? Why?
+
+<!-- Your response goes below this line. -->
+
+
+
+
+
+
+#### 11. Use the inverse cdf method to simulate at least 10,000 $X$-values and an equal number of $Y$-values.
+
+Remember, $X$ and $Y$ are still independent! Write your code accordingly.
+
+To validate your code, you should check that the means of your simulated values match the expected arrival times you calculated above. But don't include that "check" in your printed report!
+
+
+```{r Inverse CDF Method}
+
+
+
+
+```
+
+#### 12. Make separate, well-labeled histograms of the $X$-values and of the $Y$-values. Describe each distribution (shape, center, spread) in context.
+
+To validate your code, make sure your histograms look like the pdfs of $X$ and $Y$!
+
+```{r Scenario 2 histograms}
+#| fig-height: 6
+#| fig-width: 6
+
+
+
+
+```
+
+<!-- Your data descriptions go below this line. -->
+
+
+
+
+
+
+
+#### 13. Create a well-labeled, color-coded scatterplot of your $(X,Y)$ pairs. 
+
+Use your earlier function to generate the plot. No interpretation required.
+
+
+```{r Scenario 2 scatterplot}
+#| fig-height: 6
+#| fig-width: 6
+
+
+
+```
+
+
+#### 14. Calculate a 95% confidence interval for the probability that Xavier and Yolanda meet. Does your CI validate your answer to Question 10?
+
+Use your earlier function for the calculation.
+
+```{r Scenario 2 CI}
+
+```
+
+<!-- Your response goes below this line. -->
+
+
+
+
+
+------------------------------------------------------------------------
+
+A quick math sidebar... To compute the exact probability that they meet in Scenario 2 requires multivariate calculus. Because $X$ and $Y$ are independent, their joint probability distribution is $f_X(x) \cdot f_Y(y)$. The probability $X$ and $Y$ are within 15 of each other is represented by the *double* integral
+
+$$\iint_{|x-y| \leq 15} f_X(x) \cdot f_Y(y) \, dydx $$
+
+We cover this type of probability in STAT 4610.
+
+------------------------------------------------------------------------
+
+### Scenario 3: Xavier and Yolanda's arrival times are independent and normally distributed. Specifically, $X \sim N(30,10)$ and $Y \sim N(30,10)$. Assume again that they'll wait at most 15 minutes for each other.
+
+#### 15. Should the probability they meet in Scenario 3 be higher or lower than in Scenario 1? Why?
+
+<!-- Your response goes below this line. -->
+
+
+
+
+
+
+
+#### 16. Simulate at least 10,000 $(X,Y)$ pairs. Then create a well-labeled, color-coded scatterplot of your $(X,Y)$ pairs.
+
+Use your earlier function to generate the plot. No interpretation required.
+
+```{r Scenario 3 scatterplot}
+#| fig-height: 6
+#| fig-width: 6
+
+
+```
+
+
+#### 17. Calculate a 95% confidence interval for the probability that Xavier and Yolanda meet. Does your CI validate your answer to Question 15?
+
+Use your earlier function for the calculation.
+
+```{r Scenario 3 CI}
+
+```
+
+<!-- Your response goes below this line. -->
+
+
+
+
+
+
+
+#### 18. Math time! Determine the exact probability that Xavier and Yolanda meet under this model.
+
+*Hint:* The difference of two independent normal random variables is normal. What are the mean and standard deviation of this difference?
+
+<!-- Your solution goes below this line. -->
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------
+
+### Scenario 4: Their arrival times are normally distributed but *not* independent. In statistical vocabulary, the pair $(X,Y)$ has a *bivariate normal* distribution. The marginal distributions are still $X \sim N(30,10)$ and $Y \sim N(30,10)$, but $\rho(X,Y) \neq 0$.
+
+#### 19. Explain how the correlation between $X$ and $Y$ affects the likelihood that Xavier and Yolanda meet. Make sure to discuss the effects of both $\rho > 0$ and $\rho < 0$.
+
+<!-- Your response goes below this line. -->
+
+
+
+
+
+
+
+
+
+
+
+#### 20. For the rest of this investigation, assume $\rho = +.7$. Simulate at least 10,000 $(X,Y)$ pairs. Then create a well-labeled, color-coded scatterplot of your $(X,Y)$ pairs.
+
+You'll have to research how to simulate from a bivariate normal distribution. Perhaps the textbook will help?
+
+Validate your simulation code by checking that the means, standard deviations, and correlation are close to the specified parameter values. But don't include that "check" in your printed report!
+
+```{r Scenario 4 scatterplot}
+#| fig-height: 6
+#| fig-width: 6
+
+
+```
+
+#### 21. Calculate a 95% confidence interval for the probability that Xavier and Yolanda meet. Does your CI validate your answer to Question 19?
+
+Use your earlier function for the calculation. No interpretation required.
+
+```{r Scenario 4 CI}
+
+```
+
+<!-- Your response goes below this line. -->
+
+
+
+
+
+
+#### 22. Math time again! Determine the exact probability that Xavier and Yolanda meet under this model.
+
+*Hint:* The difference is still normally distributed, but something changes....
+
+<!-- Your solution goes below this line. -->
+
+
+
+
+
+
+
+
+
