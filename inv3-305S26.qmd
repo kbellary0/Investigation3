@@ -3,6 +3,7 @@ title: 'Investigation #3: Meeting Problems'
 author: "Keerthana Bellary, Cole Rowland"
 format: pdf
 echo: true
+embed-resources: TRUE
 ---
 
 ```{r Setup}
