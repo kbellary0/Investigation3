@@ -11,7 +11,6 @@ options(scipen=999)  # turns off scientific notation
 set.seed(1873264)  # set your own seed!
 ```
 
-
 This investigation is a little different, in that you'll perform some simulations and then validate your simulation results with mathematical probability.
 
 NOTE: Your code should include no looping and no `replicate()` statements whatsoever. Everything must be vectorized.
@@ -26,15 +25,15 @@ In this investigation, I will present several possible probability distributions
 
 ### Before we get to the scenarios, write two building-block functions.
 
-#### 1. Write a function that generates a scatterplot of $(X,Y)$ pairs, *color-coded* to distinguish points where $X$ and $Y$ are at most 15 apart vs. more than 15 apart. 
+#### 1. Write a function that generates a scatterplot of $(X,Y)$ pairs, *color-coded* to distinguish points where $X$ and $Y$ are at most 15 apart vs. more than 15 apart.
 
-Your inputs will be the simulated pairs of $X$ and $Y$ values that you create later, passed in as two vectors, and the output will be the color-coded graph. You'll have to research how to color-code a scatterplot in R. 
+Your inputs will be the simulated pairs of $X$ and $Y$ values that you create later, passed in as two vectors, and the output will be the color-coded graph. You'll have to research how to color-code a scatterplot in R.
 
-Your graph must include a **legend** explaining the color-coding. 
+Your graph must include a **legend** explaining the color-coding.
 
 Because the output of your function is a plot, your function will not have a `return()` statement.
 
-The axis labels and legend will be the same for every plot you make, so you may hard-code those into your function. However, **the title of each plot must be different** to indicate the different scenarios. So, you'll need to research how to pass arguments through *your* function to the plotting function inside of it. 
+The axis labels and legend will be the same for every plot you make, so you may hard-code those into your function. However, **the title of each plot must be different** to indicate the different scenarios. So, you'll need to research how to pass arguments through *your* function to the plotting function inside of it.
 
 As always, you're welcome to use base R or fancier packages like `ggplot2` if you're familiar with the latter.
 
@@ -55,10 +54,9 @@ pch = 16)
 }
 ```
 
-
 #### 2. Write a function that calculates a 95% confidence interval for the probability that Xavier and Yolanda meet.
 
-Your inputs will be the simulated pairs of $X$ and $Y$ values that you create later, passed in as two vectors, and your output will be a 95% CI for P(Xavier and Yolanda meet). 
+Your inputs will be the simulated pairs of $X$ and $Y$ values that you create later, passed in as two vectors, and your output will be a 95% CI for P(Xavier and Yolanda meet).
 
 Your function must call `prop.test()`. Round your endpoints to four decimal places.
 
@@ -70,7 +68,6 @@ round(result$conf.int, 4) }
 ```
 
 ------------------------------------------------------------------------
-
 
 ### Scenario 1: Xavier and Yolanda arrive independently and uniformly between 12pm and 1pm, so $X \sim \hbox{Unif}[0,60]$ and $Y \sim \hbox{Unif}[0,60]$.
 
@@ -110,32 +107,41 @@ No need for a confidence interval; just provide the estimate. *Hint:* The inform
 median(abs(x-y))
 ```
 
-
-
 ### Now you're going to use math to calculate some exact answers. Because $(X,Y)$ is uniformly distributed, the probability $(X,Y)$ falls in any region is just the area of that region divided by the total area where $(X,Y)$ can occur.
 
 #### 7. Use geometry to determine the area of the stripe where $X$ and $Y$ are at most 15 apart, and then determine the probability that Xavier and Yolanda meet.
 
-You might want to draw yourself the square [0,60]x[0,60] to see what's going on, but you don't need to include any picture here. 
+You might want to draw yourself the square \[0,60\]x\[0,60\] to see what's going on, but you don't need to include any picture here.
 
 <!-- Your solution goes below this line. -->
 
+Geometry:
 
+Total area of the square = (side length)\^2 = (60)\^2 = 3600
 
+Area of a single triangle = 0.5 x base of triangle x height of triangle = 0.5 x 45 x 45 = 1012.5
 
+Area of both triangles = 2(1012.5) = 2025
 
+Area of stripe = total area of the square - area of the triangles = 3600 - 2025 = 1575
 
+Probability:
 
+P(Xavier & Yolanda meet) = 1575/3600 = 0.4375 = 43.75%
 
 #### 8. Suppose they agree to wait at most $m$ minutes for each other. Again using geometry, determine the value of $m$ for which they have a 50% chance of meeting.
 
 <!-- Your solution goes below this line. -->
 
+Geometry:
 
+Total area of the square = (side length)\^2 = (60)\^2 = 3600
 
+0.5 = (area of stripe)/3600 -\> area of a stripe = 1800 -\> 3600 - area of triangles = 1800 -\> 3600 - 2(area of a triangle) = 1800 -\> area of a triangle must = 900
 
+Area of a single triangle = 0.5 x base of triangle x height of triangle
 
-
+Solve the following for m: 0.5 x (60 - m)\^2 = 900 -\> (60 - m)\^2 = 1800 -\> 60 - m = 42.4264 -\> - m = - 17.5736 -\> m = 17.5736 minutes
 
 ------------------------------------------------------------------------
 
@@ -148,27 +154,19 @@ f_Y(y) = \frac{60-y}{1800} \hbox{ for } 0 \leq y \leq 60$$
 
 <!-- Your solution goes below this line. -->
 
-
-
-
-
-
+![Calculus image](IMG_0276.jpg)
 
 #### 10. Should the probability they meet in Scenario 2 be higher or lower than the probability in Scenario 1? Why?
 
 <!-- Your response goes below this line. -->
 
-
-
-
-
+The probability that they meet in Scenario 2 should be lower than in Scenario 1 since in Scenario 1. In Scenario 1, both Xavier and Yolanda can arrive at any time within the hour, which with an equally likely chance of showing up at any time. However, in Scenario 2, Xavier is expected to be late and Yolanda is expected to be early, so this is very likely to yield a lower probability of them meeting than random chance without the biases.
 
 #### 11. Use the inverse cdf method to simulate at least 10,000 $X$-values and an equal number of $Y$-values.
 
 Remember, $X$ and $Y$ are still independent! Write your code accordingly.
 
 To validate your code, you should check that the means of your simulated values match the expected arrival times you calculated above. But don't include that "check" in your printed report!
-
 
 ```{r Inverse CDF Method}
 u1 <- runif(10000) 
@@ -198,25 +196,21 @@ col = "red")
 
 <!-- Your data descriptions go below this line. -->
 
+The histogram of Xavier's arrival time is heavily left-skewed, which shows that he is progressively more likely to arrive as the hour goes on. The distribution is centered at an expected arrival time of 40 minutes, and the data spreads across the entire range of 0 to 60 minutes.
 
+The histogram of Yolanda's arrival time is heavily right-skewed, which shows that she is progressively less likely to arrive as the hour goes on. Her distribution is centered at an expected arrival time of 20 minutes, and it shares the same overall spread, ranging from 0 to 60 minutes.
 
+Together, these distributions show that Xavier is continually more likely to arrive at each subsequent time interval, whereas Yolanda is continually less likely to arrive at each subsequent time interval (aside from a minor simulation inconsistency between the 0–5 and 5–10 minute intervals).
 
-
-
-
-#### 13. Create a well-labeled, color-coded scatterplot of your $(X,Y)$ pairs. 
+#### 13. Create a well-labeled, color-coded scatterplot of your $(X,Y)$ pairs.
 
 Use your earlier function to generate the plot. No interpretation required.
-
 
 ```{r Scenario 2 scatterplot}
 #| fig-height: 6
 #| fig-width: 6
 plot_meeting(x, y, "Scenario 2 scatterplot")
-
-
 ```
-
 
 #### 14. Calculate a 95% confidence interval for the probability that Xavier and Yolanda meet. Does your CI validate your answer to Question 10?
 
@@ -228,9 +222,7 @@ meeting_ci(x, y)
 
 <!-- Your response goes below this line. -->
 
-
-
-
+This confidence interval validates our assessment in Question 10 since the probability that they meet ranges from 32.59% to 34.45% in Scenario 2 and ranges from 42.31% to 44.26% in Scenario 1. This shows that they are in fact more likely to meet in Scenario 1 as we predicted.
 
 ------------------------------------------------------------------------
 
@@ -248,11 +240,7 @@ We cover this type of probability in STAT 4610.
 
 <!-- Your response goes below this line. -->
 
-
-
-
-
-
+Xavier and Yolanda should have a higher probability of meeting in Scenario 3 than in Scenario 1. Scenario 1 has a uniform distribution, meeting any combination of arrival times is equally likely, whereas in Scenario 3 both arrival times are normally distributed around the mean 30 meaning they are both far more likely to arrive near the middle of the hour.
 
 #### 16. Simulate at least 10,000 $(X,Y)$ pairs. Then create a well-labeled, color-coded scatterplot of your $(X,Y)$ pairs.
 
@@ -266,7 +254,6 @@ y <- rnorm(10000, 30, 10)
 plot_meeting(x, y, "Scenario 3 Scatterplot") 
 ```
 
-
 #### 17. Calculate a 95% confidence interval for the probability that Xavier and Yolanda meet. Does your CI validate your answer to Question 15?
 
 Use your earlier function for the calculation.
@@ -277,11 +264,7 @@ meeting_ci(x, y)
 
 <!-- Your response goes below this line. -->
 
-
-
-
-
-
+This confidence interval validates our assessment in Question 15 since the probability that they meet ranges from 70.17% to 71.96% in Scenario 3 and ranges from 42.31% to 44.26% in Scenario 1. This shows that they are in fact more likely to meet in Scenario 3 as we predicted.
 
 #### 18. Math time! Determine the exact probability that Xavier and Yolanda meet under this model.
 
@@ -289,13 +272,7 @@ meeting_ci(x, y)
 
 <!-- Your solution goes below this line. -->
 
-
-
-
-
-
-
-
+![Probability image](88341.jpg)
 
 ------------------------------------------------------------------------
 
@@ -305,17 +282,9 @@ meeting_ci(x, y)
 
 <!-- Your response goes below this line. -->
 
+A positive correlation (ρ\>0) betweeen X and Y means that if Yolanda or Xavier arrives either late or early, the other is most likely to do the same. A negative correlation (ρ\<0) between X and Y means that if Yolanda or Xavier arrives either late or early, the other is unlikely to do the same. A positive correlation increases their chance of meeting and a negative correlation decreases their chance of meeting.
 
-
-
-
-
-
-
-
-
-
-#### 20. For the rest of this investigation, assume $\rho = +.7$. Simulate at least 10,000 $(X,Y)$ pairs. Then create a well-labeled, color-coded scatterplot of your $(X,Y)$ pairs.
+#### **20. For the rest of this investigation, assume** $\rho = +.7$**. Simulate at least 10,000** $(X,Y)$ **pairs. Then create a well-labeled, color-coded scatterplot of your** $(X,Y)$ **pairs.**
 
 You'll have to research how to simulate from a bivariate normal distribution. Perhaps the textbook will help?
 
@@ -343,10 +312,7 @@ meeting_ci(vector_x, vector_y)
 
 <!-- Your response goes below this line. -->
 
-
-
-
-
+This confidence interval validates our assessment in Question 19 since the probability that they meet when correlation is positive ranges from 94.27% to 95.16% rather than 70.17% to 71.96% when correlation is 0, and we predicted that a positive correlation would increase their chance of meeting.
 
 #### 22. Math time again! Determine the exact probability that Xavier and Yolanda meet under this model.
 
@@ -354,11 +320,4 @@ meeting_ci(vector_x, vector_y)
 
 <!-- Your solution goes below this line. -->
 
-
-
-
-
-
-
-
-
+![Probability image](IMG_0278.jpg)
