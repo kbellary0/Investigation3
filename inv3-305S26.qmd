@@ -1,6 +1,6 @@
 ---
 title: 'Investigation #3: Meeting Problems'
-author: "Your names here"
+author: "Keerthana Bellary, Cole Rowland"
 format: pdf
 echo: true
 ---
@@ -8,7 +8,7 @@ echo: true
 ```{r Setup}
 #| include: false
 options(scipen=999)  # turns off scientific notation
-set.seed(    0    )  # set your own seed!
+set.seed(1873264)  # set your own seed!
 ```
 
 
@@ -39,12 +39,20 @@ The axis labels and legend will be the same for every plot you make, so you may 
 As always, you're welcome to use base R or fancier packages like `ggplot2` if you're familiar with the latter.
 
 ```{r Scatterplot maker}
-
-
-
-
-
-
+plot_meeting <- function(x, y, plot_title) 
+{
+meeting <- abs(x-y) <= 15 
+colors <- ifelse(meeting, "blue", "red") 
+plot(x, y, main = plot_title,
+xlab = "Xavier arrival time", 
+ylab = "Yolanda arrival time",
+col = colors, 
+pch = 16) 
+legend("topright", 
+legend = c("Meet", "Do Not Meet"), 
+col = c("blue", "red"), 
+pch = 16) 
+}
 ```
 
 
@@ -55,9 +63,10 @@ Your inputs will be the simulated pairs of $X$ and $Y$ values that you create la
 Your function must call `prop.test()`. Round your endpoints to four decimal places.
 
 ```{r CI for Prob of Meeting}
-
-
-
+meeting_ci <- function(x, y) { 
+meeting <- abs(x-y) <= 15 
+result <- prop.test(sum(meeting), length(meeting), conf.level = 0.95)
+round(result$conf.int, 4) }
 ```
 
 ------------------------------------------------------------------------
@@ -72,9 +81,9 @@ Use your earlier function to generate the plot. No interpretation required.
 ```{r Scenario 1 scatterplot}
 #| fig-height: 6
 #| fig-width: 6
-
-
-
+x <- runif(10000, 0, 60) 
+y <- runif(10000, 0, 60) 
+plot_meeting(x, y, "Scenario 1 Scatterplot") 
 ```
 
 #### 4. Calculate a 95% confidence interval for the probability that Xavier and Yolanda meet.
@@ -82,7 +91,7 @@ Use your earlier function to generate the plot. No interpretation required.
 Use your earlier function for the calculation. No interpretation required.
 
 ```{r Scenario 1 CI}
-
+meeting_ci(x, y)
 ```
 
 #### 5. Use your simulation to estimate the average *absolute* difference in their arrival times.
@@ -90,7 +99,7 @@ Use your earlier function for the calculation. No interpretation required.
 No need for a confidence interval; just provide the estimate.
 
 ```{r Scenario 1 avg abs dist}
-
+mean(abs(x-y))
 ```
 
 #### 6. Use your simulation to estimate how long they should agree to wait for each other, in order to have a 50% chance of meeting.
@@ -98,7 +107,7 @@ No need for a confidence interval; just provide the estimate.
 No need for a confidence interval; just provide the estimate. *Hint:* The information you need lies in the absolute differences.
 
 ```{r Scenario 1 how long to wait}
-
+median(abs(x-y))
 ```
 
 
@@ -162,10 +171,10 @@ To validate your code, you should check that the means of your simulated values 
 
 
 ```{r Inverse CDF Method}
-
-
-
-
+u1 <- runif(10000) 
+u2 <- runif(10000) 
+x <- 60 * sqrt(u1) 
+y <- 60 - 60 * sqrt(u2)
 ```
 
 #### 12. Make separate, well-labeled histograms of the $X$-values and of the $Y$-values. Describe each distribution (shape, center, spread) in context.
@@ -175,10 +184,16 @@ To validate your code, make sure your histograms look like the pdfs of $X$ and $
 ```{r Scenario 2 histograms}
 #| fig-height: 6
 #| fig-width: 6
-
-
-
-
+hist(x, 
+main = "Histogram of Xavier's Arrival Time", 
+xlab = "Xavier Arrival Time", 
+ylab = "frequency", 
+col = "blue") 
+hist(y, 
+main = "Histogram of Yolanda's Arrival Time", 
+xlab = "Yolanda Arrival Time", 
+ylab = "frequency",
+col = "red")
 ```
 
 <!-- Your data descriptions go below this line. -->
@@ -197,7 +212,7 @@ Use your earlier function to generate the plot. No interpretation required.
 ```{r Scenario 2 scatterplot}
 #| fig-height: 6
 #| fig-width: 6
-
+plot_meeting(x, y, "Scenario 2 scatterplot")
 
 
 ```
@@ -208,7 +223,7 @@ Use your earlier function to generate the plot. No interpretation required.
 Use your earlier function for the calculation.
 
 ```{r Scenario 2 CI}
-
+meeting_ci(x, y) 
 ```
 
 <!-- Your response goes below this line. -->
@@ -246,8 +261,9 @@ Use your earlier function to generate the plot. No interpretation required.
 ```{r Scenario 3 scatterplot}
 #| fig-height: 6
 #| fig-width: 6
-
-
+x <- rnorm(10000, 30, 10) 
+y <- rnorm(10000, 30, 10)
+plot_meeting(x, y, "Scenario 3 Scatterplot") 
 ```
 
 
@@ -256,7 +272,7 @@ Use your earlier function to generate the plot. No interpretation required.
 Use your earlier function for the calculation.
 
 ```{r Scenario 3 CI}
-
+meeting_ci(x, y) 
 ```
 
 <!-- Your response goes below this line. -->
@@ -309,7 +325,12 @@ Validate your simulation code by checking that the means, standard deviations, a
 #| fig-height: 6
 #| fig-width: 6
 
-
+library(MASS) 
+sigma <- matrix(c(100,70, 70,100), nrow = 2, byrow = TRUE) 
+xy <- mvrnorm(10000, c(30,30), sigma)
+vector_x <- xy[, 1] 
+vector_y <- xy[, 2]
+plot_meeting(vector_x, vector_y, "scenario 4 Scatterplot") 
 ```
 
 #### 21. Calculate a 95% confidence interval for the probability that Xavier and Yolanda meet. Does your CI validate your answer to Question 19?
@@ -317,7 +338,7 @@ Validate your simulation code by checking that the means, standard deviations, a
 Use your earlier function for the calculation. No interpretation required.
 
 ```{r Scenario 4 CI}
-
+meeting_ci(vector_x, vector_y) 
 ```
 
 <!-- Your response goes below this line. -->
